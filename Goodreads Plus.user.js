@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Goodreads Plus
 // @namespace    https://greasyfork.org/en/users/78880
-// @version      0.3.12
+// @version      0.3.13
 // @description  Add "Search MAM" button to Goodreads
 // @author       Slengpung
 // @match        https://www.goodreads.com/*
@@ -18,35 +18,46 @@ function Greasemonkey_main() {
 
 	var page = window.location.pathname.split('/')[1];
 	var mamSearchUrl = "";
+	var buttonBar = "";
+	var mamButton = "";
+	var buttonUl = "";
+	var bookTitle = "";
 
 	if (page === 'book') {
 		console.log("[G+] We got a book URL");
-		//var bookTitle = document.getElementsByClassName("Text__title1")[0].innerHTML;
-		var bookTitle = document.getElementById("bookTitle").innerText;
-		console.log("[G+] Book title: " + bookTitle);
-		bookTitle = bookTitle.replace('&amp;', '%26');
-		bookTitle = bookTitle.replace('&', '%26');
+
+		// Try different ways to grab book title
+		try {
+			bookTitle = document.getElementsByClassName("Text__title1")[0].innerHTML;
+		} catch {
+			bookTitle = document.getElementById("bookTitle").innerText;
+		} finally {
+			console.log("[G+] Book title: " + bookTitle);
+			bookTitle = bookTitle.replace('&amp;', '%26');
+			bookTitle = bookTitle.replace('&', '%26');
+		}
+
 		mamSearchUrl = "https://www.myanonamouse.net/tor/browse.php?tor[text]=" + bookTitle;
 
 		// Add 'Search MAM' button
 		// Old or new layout?
-		old = document.getElementById("buyButtonContainer");
+		var old = document.getElementById("buyButtonContainer");
 		if (old != null) {
 			console.log("[G+] Old layout");
-			var buttonBar = document.getElementById("buyButtonContainer");
+			buttonBar = document.getElementById("buyButtonContainer");
 			if (buttonBar === null || buttonBar == "null") {
 				buttonBar = document.getElementById("asyncBuyButtonContainer");
 			}
-			var buttonUl = buttonBar.getElementsByTagName("ul");
-			var mamButton = document.createElement("li");
+			buttonUl = buttonBar.getElementsByTagName("ul");
+			mamButton = document.createElement("li");
 			mamButton.innerHTML = '<a id="mamLink" href="' + mamSearchUrl + '" target="_blank" class="buttonBar">Search MAM</a>';
 			mamButton.className = "Button";
 			buttonUl[0].appendChild(mamButton);
 			console.log("[G+] 'Search MAM' button added!");
 		} else {
 			console.log("[G+] New layout");
-			var buttonBar = document.getElementsByClassName("BookActions")[0];
-			var mamButton = document.getElementsByClassName("BookActions__button")[0].cloneNode(true);
+			buttonBar = document.getElementsByClassName("BookActions")[0];
+			mamButton = document.getElementsByClassName("BookActions__button")[0].cloneNode(true);
 			mamButton.innerHTML = '<div class="BookActions__button"><a href="' + mamSearchUrl + '">' +
 				'<div class="Button__container Button__container--block">' +
 				'<button type="button" class="Button Button--secondary Button--medium Button--block">' +
