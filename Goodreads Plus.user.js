@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Goodreads Plus
 // @namespace    https://greasyfork.org/en/users/78880
-// @version      0.3.10
+// @version      0.3.11
 // @description  Add "Search MAM" button to Goodreads
 // @author       Slengpung
 // @match        https://www.goodreads.com/*
@@ -21,7 +21,8 @@ function Greasemonkey_main() {
 
 	if (page === 'book') {
 		console.log("[G+] We got a book URL");
-		var bookTitle = document.getElementsByClassName("Text__title1")[0].innerHTML;
+		//var bookTitle = document.getElementsByClassName("Text__title1")[0].innerHTML;
+		var bookTitle = document.getElementById("bookTitle").innerHTML;
 		console.log("[G+] Book title: " + bookTitle);
 		bookTitle = bookTitle.replace('&amp;', '%26');
 		bookTitle = bookTitle.replace('&', '%26');
