@@ -21,7 +21,7 @@ var buttonBar = document.getElementById("buyButtonContainer");
 if (buttonBar === null || buttonBar == "null") {
 	buttonBar = document.getElementById("asyncBuyButtonContainer");
 }
-var buttonUl  = buttonBar.getElementsByTagName("ul");
+var buttonUl = buttonBar.getElementsByTagName("ul");
 var mamButton = document.createElement("li");
 mamButton.innerHTML = '<a id="mamLink" href="' + mamSearchUrl + '" target="_blank" class="buttonBar">Search MAM</a>';
 mamButton.className = "Button";
