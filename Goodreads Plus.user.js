@@ -1,11 +1,12 @@
 // ==UserScript==
-// @name         Goodreads Plus
+// @name         Goodreads Plus DEV
 // @namespace    https://greasyfork.org/en/users/78880
-// @version      0.2
+// @version      0.3.8
 // @description  Add "Search MAM" button to Goodreads
 // @author       Slengpung
 // @include      https://www.goodreads.com/*
 // @grant        none
+// @license      MIT
 // @downloadURL none
 // ==/UserScript==
 
@@ -14,19 +15,20 @@ console.log("[G+] Tweaking Goodreads...");
 var page = window.location.pathname.split('/')[1];
 
 if (page === 'book') {
-	var bookTitle = getBookTitle(document.getElementById("bookTitle"));
+	console.log("[G+] We got a book URL");
+	var bookTitle = document.getElementsByClassName("Text__title1")[0].innerHTML;
+	console.log("[G+] Book title: " + bookTitle);
 	var mamSearchUrl = "https://www.myanonamouse.net/tor/browse.php?tor[text]=" + bookTitle;
 
 	// Add 'Search MAM' button
-	var buttonBar = document.getElementById("buyButtonContainer");
-	if (buttonBar === null || buttonBar == "null") {
-		buttonBar = document.getElementById("asyncBuyButtonContainer");
-	}
-	var buttonUl = buttonBar.getElementsByTagName("ul");
-	var mamButton = document.createElement("li");
-	mamButton.innerHTML = '<a id="mamLink" href="' + mamSearchUrl + '" target="_blank" class="buttonBar">Search MAM</a>';
-	mamButton.className = "Button";
-	buttonUl[0].appendChild(mamButton);
+	var buttonBar = document.getElementsByClassName("BookActions")[0];
+	var mamButton = document.getElementsByClassName("BookActions__button")[0].cloneNode(true);
+	mamButton.innerHTML = '<div class="BookActions__button"><a href="' + mamSearchUrl + '">' +
+		'<div class="Button__container Button__container--block">' +
+		'<button type="button" class="Button Button--secondary Button--medium Button--block">' +
+		'<span class="Button__labelItem">Search MAM</span></button></div></a></div>';
+
+	buttonBar.appendChild(mamButton)
 	console.log("[G+] 'Search MAM' button added!");
 } else if (page === 'review') {
 	var bookList = document.querySelectorAll('#booksBody .title div a');
@@ -42,11 +44,4 @@ if (page === 'book') {
 		bookList[i].parentNode.parentNode.appendChild(newLink);
 	}
 	console.log("[G+] 'Search MAM' buttons added!");
-}
-
-// Grab book title (and only title) from the element
-function getBookTitle(el) {
-	var bookTitle = el.innerHTML.trim().split('<', 1) + '';
-	console.log("Book title: " + bookTitle.trim());
-	return bookTitle.trim();
 }
