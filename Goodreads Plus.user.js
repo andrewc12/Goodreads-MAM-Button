@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         Goodreads Plus DEV
+// @name         Goodreads Plus
 // @namespace    https://greasyfork.org/en/users/78880
-// @version      0.3.8
+// @version      0.3.9
 // @description  Add "Search MAM" button to Goodreads
 // @author       Slengpung
 // @include      https://www.goodreads.com/*
